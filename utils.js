@@ -7,8 +7,12 @@ exports.handleHashPassword = async function (password) {
   return hashedPassword;
 };
 
-exports.handleMatchPassword = function (providedPassword, hashedPassword) {
-  return bcrypt.compare(providedPassword, hashedPassword);
+exports.handleMatchPassword = async function (
+  providedPassword,
+  hashedPassword
+) {
+  const isMatching = await bcrypt.compare(providedPassword, hashedPassword);
+  return isMatching;
 };
 
 exports.handleSigninWithToken = (id) => {

@@ -26,7 +26,7 @@ exports.signin = async (req, res) => {
   const { email, password } = req.body;
   const admin = await Admin.findOne({ email }).select("+password");
   const isPasswordValid = admin
-    ? admin.matchPassword(password, admin.password)
+    ? await admin.matchPassword(password, admin.password)
     : false;
 
   if (!admin || !isPasswordValid) {
