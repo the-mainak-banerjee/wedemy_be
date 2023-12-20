@@ -84,3 +84,26 @@ exports.handleCoursePurchase = async function (req, res) {
     });
   }
 };
+
+exports.getPurchasedCourse = async function (req, res) {
+  try {
+    const courses = await PurchasedCourse.find({ user: req.user }).populate(
+      "course"
+    );
+    if (courses && courses.length === 0) {
+      return res.status(200).json({
+        status: "success",
+        message: "User has not enrolled in any course",
+      });
+    }
+    res.status(200).send({
+      status: "Success",
+      courses: courses,
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err,
+    });
+  }
+};
