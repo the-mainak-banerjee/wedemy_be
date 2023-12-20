@@ -1,5 +1,5 @@
-const Admin = require("../models/adminModel");
 const Course = require("../models/courseModel");
+const { Admin } = require("../models/customerModel");
 const { handleSigninWithToken } = require("../utils");
 
 exports.signup = async (req, res) => {

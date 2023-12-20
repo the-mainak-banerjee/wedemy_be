@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const Admin = require("../models/adminModel");
+const { Admin } = require("../models/customerModel");
 
 exports.authenticateUserMiddleware = async function (req, res, next) {
   // const isAdmin = req.baseUrl.includes("admin");
