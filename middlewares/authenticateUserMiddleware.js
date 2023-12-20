@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken");
-const { Admin } = require("../models/customerModel");
+const { Admin, User } = require("../models/customerModel");
 
 exports.authenticateUserMiddleware = async function (req, res, next) {
-  // const isAdmin = req.baseUrl.includes("admin");
+  const isAdmin = req.baseUrl.includes("admin");
   try {
     const { authorization } = req.headers;
     let token;
@@ -12,13 +12,20 @@ exports.authenticateUserMiddleware = async function (req, res, next) {
     }
 
     if (!token) {
-      res.status(401).json({
+      return res.status(401).json({
         message: "You are not logged in. Please login to get access.",
       });
     }
 
     const decoded = await jwt.verify(token, process.env.JWT_SECRET);
-    const currentUser = await Admin.findById(decoded.id);
+    const Model = isAdmin ? Admin : User;
+    const currentUser = await Model.findById(decoded.id);
+
+    if (!currentUser) {
+      return res.status(401).json({
+        message: "You don't have permission to access this page.",
+      });
+    }
 
     req.user = currentUser;
     next();

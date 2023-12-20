@@ -1,3 +1,4 @@
+const Course = require("../models/courseModel");
 const { User } = require("../models/customerModel");
 const { handleSigninWithToken } = require("../utils");
 
@@ -42,4 +43,18 @@ exports.signin = async function (req, res) {
       token,
     },
   });
+};
+
+exports.getAllCourses = async function (req, res) {
+  try {
+    const allCourses = await Course.find();
+    res.status(200).json({
+      data: allCourses,
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err,
+    });
+  }
 };
