@@ -69,6 +69,21 @@ exports.handleCoursePurchase = async function (req, res) {
         message: "No course found",
       });
     }
+
+    const purchasedCourse = await PurchasedCourse.findOne({
+      course: req.params.courseId,
+      user: req.user.id,
+    });
+
+    if (purchasedCourse) {
+      return res
+        .status(409)
+        .json({
+          status: "fail",
+          message: "User is already enrolled in the course.",
+        });
+    }
+
     const purchasedCourseData = {
       course: req.params.courseId,
       user: req.user,
