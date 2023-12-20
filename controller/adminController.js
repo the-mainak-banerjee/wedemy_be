@@ -61,9 +61,22 @@ exports.createCourse = async (req, res) => {
 };
 
 exports.getCourses = async (req, res) => {
-  const user = req.user;
-  const allCourses = await Course.find({ instructor: { $eq: user.id } }).select(
-    "title description price"
-  );
-  res.status(200).json({ courses: allCourses });
+  try {
+    const user = req.user;
+    const allCourses = await Course.find({
+      instructor: { $eq: user.id },
+    }).select("title description price");
+
+    if (allCourses && allCourses.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "User does not have any courses" });
+    }
+    res.status(200).json({ status: "success", courses: allCourses });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err,
+    });
+  }
 };
