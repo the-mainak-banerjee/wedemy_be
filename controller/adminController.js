@@ -1,4 +1,5 @@
 const Admin = require("../models/adminModel");
+const Course = require("../models/courseModel");
 const { handleSigninWithToken } = require("../utils");
 
 exports.signup = async (req, res) => {
@@ -42,4 +43,19 @@ exports.signin = async (req, res) => {
       token,
     },
   });
+};
+
+exports.createCourse = async (req, res) => {
+  try {
+    const courseData = { ...req.body, instructor: req.user.id };
+    const course = await Course.create(courseData);
+    res
+      .status(200)
+      .json({ message: "Course created successfully", courseId: course.id });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err,
+    });
+  }
 };
