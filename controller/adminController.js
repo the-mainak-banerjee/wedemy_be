@@ -59,3 +59,11 @@ exports.createCourse = async (req, res) => {
     });
   }
 };
+
+exports.getCourses = async (req, res) => {
+  const user = req.user;
+  const allCourses = await Course.find({ instructor: { $eq: user.id } }).select(
+    "title description price"
+  );
+  res.status(200).json({ courses: allCourses });
+};

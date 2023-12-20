@@ -16,6 +16,7 @@ router.route("/signup").post(validateUserMiddleware, adminController.signup);
 router.route("/signin").post(validateUserMiddleware, adminController.signin);
 router
   .route("/courses")
+  .get(authenticateUserMiddleware, adminController.getCourses)
   .post(
     authenticateUserMiddleware,
     validateCourseMiddleware,
