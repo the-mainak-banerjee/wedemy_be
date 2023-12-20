@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { handleHashPassword, handleMatchPassword } = require("../utils");
 
-const adminSchema = mongoose.Schema({
+const customerSchema = mongoose.Schema({
   email: {
     type: String,
     required: [true, "Please tell us your email address"],
@@ -15,19 +15,18 @@ const adminSchema = mongoose.Schema({
   },
 });
 
-adminSchema.pre("save", async function (next) {
+customerSchema.pre("save", async function (next) {
   const protectedPassword = await handleHashPassword(this.password);
   this.password = protectedPassword;
   next();
 });
 
-adminSchema.methods.matchPassword = function (
+customerSchema.methods.matchPassword = function (
   providedPassword,
   hashedPassword
 ) {
   return handleMatchPassword(providedPassword, hashedPassword);
 };
 
-const Admin = mongoose.model("Admin", adminSchema);
-
-module.exports = Admin;
+exports.Admin = mongoose.model("Admin", customerSchema);
+exports.User = mongoose.model("User", customerSchema);
