@@ -27,7 +27,7 @@ exports.signin = async function (req, res) {
   const { email, password } = req.body;
   const user = await User.findOne({ email: email }).select("+password");
   const isPasswordValid = user
-    ? user.matchPassword(password, user.password)
+    ? await user.matchPassword(password, user.password)
     : false;
 
   if (!user || !isPasswordValid) {
@@ -76,12 +76,10 @@ exports.handleCoursePurchase = async function (req, res) {
     });
 
     if (purchasedCourse) {
-      return res
-        .status(409)
-        .json({
-          status: "fail",
-          message: "User is already enrolled in the course.",
-        });
+      return res.status(409).json({
+        status: "fail",
+        message: "User is already enrolled in the course.",
+      });
     }
 
     const purchasedCourseData = {
