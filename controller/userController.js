@@ -1,4 +1,5 @@
 const Course = require("../models/courseModel");
+const PurchasedCourse = require("../models/purchasedCourseModel");
 const { User } = require("../models/customerModel");
 const { handleSigninWithToken } = require("../utils");
 
@@ -51,6 +52,31 @@ exports.getAllCourses = async function (req, res) {
     res.status(200).json({
       data: allCourses,
     });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err,
+    });
+  }
+};
+
+exports.handleCoursePurchase = async function (req, res) {
+  try {
+    const course = await Course.findById(req.params.courseId);
+    if (!course) {
+      res.status(404).json({
+        status: "fail",
+        message: "No course found",
+      });
+    }
+    const purchasedCourseData = {
+      course: req.params.courseId,
+      user: req.user,
+    };
+    await PurchasedCourse.create(purchasedCourseData);
+    res
+      .status(200)
+      .json({ status: "success", message: "Course purchased successfully" });
   } catch (err) {
     res.status(400).json({
       status: "fail",

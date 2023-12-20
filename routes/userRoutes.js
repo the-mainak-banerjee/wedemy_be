@@ -15,4 +15,8 @@ router
   .route("/courses")
   .get(authenticateUserMiddleware, userController.getAllCourses);
 
+router
+  .route("/courses/:courseId")
+  .post(authenticateUserMiddleware, userController.handleCoursePurchase);
+
 module.exports = router;
