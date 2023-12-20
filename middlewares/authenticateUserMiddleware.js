@@ -22,5 +22,9 @@ exports.authenticateUserMiddleware = async function (req, res, next) {
 
     req.user = currentUser;
     next();
-  } catch (e) {}
+  } catch (e) {
+    res.status(401).json({
+      message: "You are not logged in. Please login to get access.",
+    });
+  }
 };
